@@ -35,17 +35,15 @@ jobs:
 
       - name: Maven Test
         run: mvn -B -ntp test
-        working-directory: m347-ref-card-01
 
       - name: Package (build JAR)
         run: mvn -B -ntp -DskipTests package
-        working-directory: m347-ref-card-01
 
       - name: Upload built JAR (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: m347-ref-card-01/target/*.jar
+          path: target/*.jar
 
   docker:
     name: Build and Push Docker Image
@@ -80,8 +78,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: m347-ref-card-01
-          file: m347-ref-card-01/Dockerfile
+          context: .
+          file: Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
